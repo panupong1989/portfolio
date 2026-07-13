@@ -152,7 +152,7 @@ export const PROJECTS: IProject[] = [
         </ul>
         `,
         role: `
-        Founder & Full-Stack Developer — I owned the whole product:
+        Full-Stack Developer — I built the whole product end to end:
         <ul>
             <li>🗄️ Designed the multi-tenant PostgreSQL data model and backend</li>
             <li>📡 Built the realtime MQTT device layer and ESP32 firmware</li>
@@ -317,7 +317,7 @@ export const PROJECTS: IProject[] = [
 
 export const MY_EXPERIENCE = [
     {
-        title: 'Founder & Full-Stack Developer',
+        title: 'Full-Stack Developer',
         company: 'INTERNOVATE Co., Ltd.',
         duration: '2025 - Present',
     },
