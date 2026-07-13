@@ -55,6 +55,17 @@ const Banner = () => {
                 ref={containerRef}
             >
                 <div className="max-md:grow max-md:flex flex-col justify-center items-start max-w-[544px]">
+                    {/* Profile photo — inline above the title on mobile */}
+                    <div className="slide-up-and-fade md:hidden mb-6 relative h-24 w-24 rounded-full overflow-hidden ring-1 ring-white/10">
+                        <Image
+                            src="/assets/profile.jpg"
+                            alt="Panupong (Beer)"
+                            fill
+                            sizes="96px"
+                            className="object-cover"
+                            priority
+                        />
+                    </div>
                     <h1 className="banner-title slide-up-and-fade leading-[.95] text-6xl sm:text-[80px] font-anton">
                         <span className="text-primary">FULL-STACK</span>
                         <br /> <span className="ml-4">DEVELOPER</span>
