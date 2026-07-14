@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { CSSProperties, useRef } from 'react';
 import {
     Handshake,
-    Eye,
     UserCheck,
     Rocket,
     Terminal,
@@ -23,7 +22,7 @@ const PHASE_COLOR: Record<Phase, string> = {
     Discover: '#22d3ee', // cyan
     Define: '#8b5cf6', // violet
     Build: '#22c55e', // green
-    Verify: '#f59e0b', // amber (my differentiator)
+    Verify: '#f59e0b', // amber
     Ship: '#10b981', // emerald
 };
 
@@ -37,7 +36,7 @@ interface Step {
     phase: Phase;
     logo?: string;
     icon?: LucideIcon;
-    badge?: LucideIcon; // small overlay to distinguish same-logo steps
+    badge?: LucideIcon;
     highlight?: boolean;
 }
 
@@ -45,7 +44,7 @@ const STEPS: Step[] = [
     {
         n: 1,
         title: 'Requirement',
-        desc: 'Gather requirements from the client',
+        desc: 'Understand the goal and scope with the client',
         role: 'Client',
         phase: 'Discover',
         icon: Handshake,
@@ -53,63 +52,31 @@ const STEPS: Step[] = [
     {
         n: 2,
         title: 'Research',
-        desc: 'Research & feasibility with Claude',
+        desc: 'Research & pressure-test feasibility with Claude',
         role: 'Developer',
         phase: 'Discover',
         logo: '/logo/claude.svg',
     },
     {
         n: 3,
-        title: 'Knowledge base',
-        desc: 'Store findings in Notion',
-        role: 'Developer',
-        phase: 'Define',
-        logo: '/logo/notion.svg',
-    },
-    {
-        n: 4,
-        title: 'System design',
-        desc: 'Tech stack, DB schema & UX/UI in Notion',
+        title: 'Design & plan',
+        desc: 'System design, DB schema, UX/UI & task breakdown in Notion',
         role: 'Developer / Architect',
         phase: 'Define',
         logo: '/logo/notion.svg',
     },
     {
-        n: 5,
-        title: 'Plan & tasks',
-        desc: 'Break the build into tasks in Notion',
-        role: 'Developer / PM',
-        phase: 'Define',
-        logo: '/logo/notion.svg',
-    },
-    {
-        n: 6,
-        title: 'Coding & testing',
-        desc: 'Implement & test with Claude Code',
-        role: 'Developer',
+        n: 4,
+        title: 'Build & review',
+        desc: 'Ship fast with Claude Code — then I review every PR by hand before it merges to GitHub',
+        role: 'Developer (me)',
         phase: 'Build',
         logo: '/logo/claude.svg',
         badge: Terminal,
-    },
-    {
-        n: 7,
-        title: 'Commit & push',
-        desc: 'Version control on GitHub',
-        role: 'Developer',
-        phase: 'Build',
-        logo: '/logo/github.svg',
-    },
-    {
-        n: 8,
-        title: 'Review & merge',
-        desc: 'I review every PR by hand before merge',
-        role: 'Developer (me)',
-        phase: 'Verify',
-        icon: Eye,
         highlight: true,
     },
     {
-        n: 9,
+        n: 5,
         title: 'UAT',
         desc: 'User acceptance testing with the client',
         role: 'Client / QA',
@@ -117,7 +84,7 @@ const STEPS: Step[] = [
         icon: UserCheck,
     },
     {
-        n: 10,
+        n: 6,
         title: 'Production',
         desc: 'Shipped & live in production',
         role: 'Developer / DevOps',
@@ -145,7 +112,6 @@ const StepCard = ({ step }: { step: Step }) => {
                 } as CSSProperties
             }
         >
-            {/* header: step number + phase dot */}
             <div className="flex items-center justify-between">
                 <span className="font-anton text-sm leading-none text-muted-foreground">
                     {step.n.toString().padStart(2, '0')}
@@ -157,7 +123,6 @@ const StepCard = ({ step }: { step: Step }) => {
                 />
             </div>
 
-            {/* logo / icon */}
             <div className="relative size-9">
                 {step.logo ? (
                     <Image
@@ -208,20 +173,15 @@ const StepCard = ({ step }: { step: Step }) => {
 const Workflow = () => {
     const container = useRef<HTMLDivElement>(null);
 
-    // Desktop snake: row 1 left→right (steps 1-5), row 2 right→left (steps 6-10).
-    const rowOne = STEPS.slice(0, 5);
-    const rowTwo = [...STEPS.slice(5, 10)].reverse(); // renders 10,9,8,7,6
-
     useGSAP(
         () => {
             const mm = gsap.matchMedia();
 
             mm.add('(prefers-reduced-motion: no-preference)', () => {
-                // cards reveal (matches My Stack / My Experience)
                 gsap.from('.workflow-card', {
                     opacity: 0,
                     y: 40,
-                    stagger: 0.06,
+                    stagger: 0.08,
                     scrollTrigger: {
                         trigger: container.current,
                         start: 'top 75%',
@@ -230,18 +190,16 @@ const Workflow = () => {
                     },
                 });
 
-                // connector lines draw themselves on scroll
                 gsap.fromTo(
                     '.wf-draw-x',
                     { scaleX: 0 },
                     {
                         scaleX: 1,
                         ease: 'none',
-                        stagger: 0.15,
                         scrollTrigger: {
                             trigger: container.current,
-                            start: 'top 70%',
-                            end: 'center 60%',
+                            start: 'top 72%',
+                            end: 'center 62%',
                             scrub: 0.6,
                         },
                     },
@@ -254,8 +212,8 @@ const Workflow = () => {
                         ease: 'none',
                         scrollTrigger: {
                             trigger: container.current,
-                            start: 'top 66%',
-                            end: 'center 60%',
+                            start: 'top 72%',
+                            end: 'center 62%',
                             scrub: 0.6,
                         },
                     },
@@ -264,8 +222,8 @@ const Workflow = () => {
                     opacity: 0,
                     scrollTrigger: {
                         trigger: container.current,
-                        start: 'center 70%',
-                        end: 'center 55%',
+                        start: 'center 72%',
+                        end: 'center 58%',
                         scrub: 0.6,
                     },
                 });
@@ -280,9 +238,9 @@ const Workflow = () => {
                 <SectionTitle title="My Workflow" />
 
                 <p className="mb-8 max-w-[560px] text-muted-foreground">
-                    How I take a project from a client request to production —
-                    AI accelerates every step, but I own the outcome and verify
-                    the work by hand.
+                    How I take a project from a client request to production. AI
+                    accelerates every step — but I own the outcome and verify the
+                    work by hand.
                 </p>
 
                 {/* phase legend */}
@@ -302,71 +260,39 @@ const Workflow = () => {
                     ))}
                 </div>
 
-                {/* ---------- Desktop: 2-row snake stepper ----------
-                   Cards are a fixed 184px tall with a 64px (mt-16) row gap, so
-                   the right-hand turn connector and the loop-back bracket use
-                   deterministic offsets (row centres at 92px and 92+184+64=340px).
-                   The horizontal lines sit at each row's own vertical centre, so
-                   they stay aligned even if that height ever changes. */}
-                <div className="hidden lg:flex">
-                    {/* loop-back gutter: dashed bracket from the last row up to step 01 */}
-                    <div className="relative w-14 shrink-0">
-                        <div
-                            className="wf-loop absolute bottom-[92px] right-1 top-[92px] rounded-l-2xl border-b-2 border-l-2 border-t-2 border-dashed"
-                            style={{ borderColor: `${PHASE_COLOR.Verify}88` }}
+                {/* ---------- Desktop: single-row stepper ---------- */}
+                <div className="relative hidden pb-16 lg:block">
+                    {/* row of cards + connector line */}
+                    <div className="relative grid grid-cols-6 gap-4">
+                        {/* connector (draws L→R, behind cards, shows in the gaps) */}
+                        <span
+                            className="wf-draw-x pointer-events-none absolute left-[8.3%] right-[8.3%] top-1/2 z-0 h-0.5 -translate-y-1/2 origin-left rounded-full bg-white/20"
                             aria-hidden
                         />
-                        <span
-                            className="wf-loop absolute left-0.5 top-1/2 flex -translate-y-1/2 items-center gap-1 whitespace-nowrap text-[11px] font-medium"
-                            style={{
-                                color: PHASE_COLOR.Verify,
-                                writingMode: 'vertical-rl',
-                            }}
-                        >
-                            <RotateCcw className="size-3" aria-hidden />
-                            new requirements
-                        </span>
+                        {STEPS.map((s) => (
+                            <div key={s.n} className="relative z-10">
+                                <StepCard step={s} />
+                            </div>
+                        ))}
                     </div>
 
-                    {/* timeline */}
-                    <div className="relative flex-1">
-                        {/* right-hand turn connector (draws top→bottom) */}
-                        <span
-                            className="wf-draw-y pointer-events-none absolute right-[9%] top-[92px] z-0 h-[248px] w-0.5 origin-top rounded-full bg-white/20"
-                            aria-hidden
-                        />
-
-                        {/* row 1 */}
-                        <div className="relative grid grid-cols-5 gap-4">
-                            <span
-                                className="wf-draw-x pointer-events-none absolute left-[9%] right-[9%] top-1/2 z-0 h-0.5 -translate-y-1/2 origin-left rounded-full bg-white/20"
-                                aria-hidden
-                            />
-                            {rowOne.map((s) => (
-                                <div key={s.n} className="relative z-10 h-[184px]">
-                                    <StepCard step={s} />
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* row 2 (reversed for the snake flow) */}
-                        <div className="relative mt-16 grid grid-cols-5 gap-4">
-                            <span
-                                className="wf-draw-x pointer-events-none absolute left-[9%] right-[9%] top-1/2 z-0 h-0.5 -translate-y-1/2 origin-right rounded-full bg-white/20"
-                                aria-hidden
-                            />
-                            {rowTwo.map((s) => (
-                                <div key={s.n} className="relative z-10 h-[184px]">
-                                    <StepCard step={s} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    {/* loop-back: dashed "U" under the row, end → start */}
+                    <div
+                        className="wf-loop pointer-events-none absolute inset-x-[8.3%] bottom-4 h-9 rounded-b-2xl border-b-2 border-l-2 border-r-2 border-dashed"
+                        style={{ borderColor: `${PHASE_COLOR.Verify}88` }}
+                        aria-hidden
+                    />
+                    <span
+                        className="wf-loop absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap text-[11px] font-medium"
+                        style={{ color: PHASE_COLOR.Verify }}
+                    >
+                        <RotateCcw className="size-3" aria-hidden />
+                        New requirements loop back to step 01 — the cycle repeats
+                    </span>
                 </div>
 
                 {/* ---------- Mobile / tablet: vertical timeline ---------- */}
                 <div className="relative lg:hidden">
-                    {/* vertical line */}
                     <span
                         className="wf-draw-y absolute bottom-3 left-[7px] top-3 w-0.5 origin-top rounded-full bg-white/15"
                         aria-hidden
