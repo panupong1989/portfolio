@@ -147,16 +147,23 @@ const Workflow = () => {
             const mm = gsap.matchMedia();
 
             mm.add('(prefers-reduced-motion: no-preference)', () => {
+                // Play-once reveals (not scrubbed): the section reliably becomes
+                // visible when it enters the viewport and stays visible — a
+                // scrub tied to this tall section could otherwise leave cards at
+                // opacity 0 while they are on screen.
+                const trigger = {
+                    trigger: container.current,
+                    start: 'top 78%',
+                    toggleActions: 'play none none reverse',
+                } as const;
+
                 gsap.from('.workflow-card', {
                     opacity: 0,
                     y: 40,
+                    duration: 0.6,
+                    ease: 'power2.out',
                     stagger: 0.08,
-                    scrollTrigger: {
-                        trigger: container.current,
-                        start: 'top 75%',
-                        end: 'center 65%',
-                        scrub: 0.5,
-                    },
+                    scrollTrigger: trigger,
                 });
 
                 gsap.fromTo(
@@ -164,13 +171,9 @@ const Workflow = () => {
                     { scaleX: 0 },
                     {
                         scaleX: 1,
-                        ease: 'none',
-                        scrollTrigger: {
-                            trigger: container.current,
-                            start: 'top 72%',
-                            end: 'center 62%',
-                            scrub: 0.6,
-                        },
+                        duration: 0.9,
+                        ease: 'power2.out',
+                        scrollTrigger: trigger,
                     },
                 );
                 gsap.fromTo(
@@ -178,23 +181,16 @@ const Workflow = () => {
                     { scaleY: 0 },
                     {
                         scaleY: 1,
-                        ease: 'none',
-                        scrollTrigger: {
-                            trigger: container.current,
-                            start: 'top 72%',
-                            end: 'center 62%',
-                            scrub: 0.6,
-                        },
+                        duration: 0.9,
+                        ease: 'power2.out',
+                        scrollTrigger: trigger,
                     },
                 );
                 gsap.from('.wf-loop', {
                     opacity: 0,
-                    scrollTrigger: {
-                        trigger: container.current,
-                        start: 'center 72%',
-                        end: 'center 58%',
-                        scrub: 0.6,
-                    },
+                    duration: 0.6,
+                    delay: 0.3,
+                    scrollTrigger: trigger,
                 });
             });
         },
