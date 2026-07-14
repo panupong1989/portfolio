@@ -17,9 +17,6 @@ import {
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-/** Single on-brand accent (the site's primary green) via the CSS variable. */
-const ACCENT = 'hsl(var(--primary))';
-
 interface Step {
     n: number;
     title: string;
