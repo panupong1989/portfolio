@@ -147,15 +147,17 @@ const Workflow = () => {
             const mm = gsap.matchMedia();
 
             mm.add('(prefers-reduced-motion: no-preference)', () => {
-                // Play-once reveals (not scrubbed): the section reliably becomes
-                // visible when it enters the viewport and stays visible — a
-                // scrub tied to this tall section could otherwise leave cards at
-                // opacity 0 while they are on screen.
-                const trigger = {
-                    trigger: container.current,
-                    start: 'top 78%',
-                    toggleActions: 'play none none reverse',
-                } as const;
+                // `immediateRender: false` is the key robustness choice: the
+                // cards/lines render at their natural (visible) state and are
+                // only hidden the instant the tween actually plays. If the
+                // ScrollTrigger ever fails to fire (Lenis/layout timing), the
+                // failure mode is "visible" instead of "stuck at opacity 0".
+                const st = () =>
+                    ({
+                        trigger: container.current,
+                        start: 'top 85%',
+                        once: true,
+                    }) as const;
 
                 gsap.from('.workflow-card', {
                     opacity: 0,
@@ -163,7 +165,8 @@ const Workflow = () => {
                     duration: 0.6,
                     ease: 'power2.out',
                     stagger: 0.08,
-                    scrollTrigger: trigger,
+                    immediateRender: false,
+                    scrollTrigger: st(),
                 });
 
                 gsap.fromTo(
@@ -173,7 +176,8 @@ const Workflow = () => {
                         scaleX: 1,
                         duration: 0.9,
                         ease: 'power2.out',
-                        scrollTrigger: trigger,
+                        immediateRender: false,
+                        scrollTrigger: st(),
                     },
                 );
                 gsap.fromTo(
@@ -183,16 +187,22 @@ const Workflow = () => {
                         scaleY: 1,
                         duration: 0.9,
                         ease: 'power2.out',
-                        scrollTrigger: trigger,
+                        immediateRender: false,
+                        scrollTrigger: st(),
                     },
                 );
                 gsap.from('.wf-loop', {
                     opacity: 0,
                     duration: 0.6,
-                    delay: 0.3,
-                    scrollTrigger: trigger,
+                    immediateRender: false,
+                    scrollTrigger: st(),
                 });
             });
+
+            // Recalculate trigger positions once fonts/images/layout settle, so
+            // the start point isn't stale (a common Lenis + Next.js flake).
+            const t = window.setTimeout(() => ScrollTrigger.refresh(), 600);
+            return () => window.clearTimeout(t);
         },
         { scope: container },
     );
