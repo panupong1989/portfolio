@@ -11,29 +11,20 @@ import {
     Rocket,
     Terminal,
     RotateCcw,
+    ChevronUp,
     type LucideIcon,
 } from 'lucide-react';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-type Phase = 'Discover' | 'Define' | 'Build' | 'Verify' | 'Ship';
-
-const PHASE_COLOR: Record<Phase, string> = {
-    Discover: '#22d3ee', // cyan
-    Define: '#8b5cf6', // violet
-    Build: '#22c55e', // green
-    Verify: '#f59e0b', // amber
-    Ship: '#10b981', // emerald
-};
-
-const PHASES: Phase[] = ['Discover', 'Define', 'Build', 'Verify', 'Ship'];
+/** Single on-brand accent (the site's primary green) via the CSS variable. */
+const ACCENT = 'hsl(var(--primary))';
 
 interface Step {
     n: number;
     title: string;
     desc: string;
     role: string;
-    phase: Phase;
     logo?: string;
     icon?: LucideIcon;
     badge?: LucideIcon;
@@ -46,7 +37,6 @@ const STEPS: Step[] = [
         title: 'Requirement',
         desc: 'Understand the goal and scope with the client',
         role: 'Client',
-        phase: 'Discover',
         icon: Handshake,
     },
     {
@@ -54,7 +44,6 @@ const STEPS: Step[] = [
         title: 'Research',
         desc: 'Research & pressure-test feasibility with Claude',
         role: 'Developer',
-        phase: 'Discover',
         logo: '/logo/claude.svg',
     },
     {
@@ -62,7 +51,6 @@ const STEPS: Step[] = [
         title: 'Design & plan',
         desc: 'System design, DB schema, UX/UI & task breakdown in Notion',
         role: 'Developer / Architect',
-        phase: 'Define',
         logo: '/logo/notion.svg',
     },
     {
@@ -70,7 +58,6 @@ const STEPS: Step[] = [
         title: 'Build & review',
         desc: 'Ship fast with Claude Code — then I review every PR by hand before it merges to GitHub',
         role: 'Developer (me)',
-        phase: 'Build',
         logo: '/logo/claude.svg',
         badge: Terminal,
         highlight: true,
@@ -80,7 +67,6 @@ const STEPS: Step[] = [
         title: 'UAT',
         desc: 'User acceptance testing with the client',
         role: 'Client / QA',
-        phase: 'Verify',
         icon: UserCheck,
     },
     {
@@ -88,40 +74,30 @@ const STEPS: Step[] = [
         title: 'Production',
         desc: 'Shipped & live in production',
         role: 'Developer / DevOps',
-        phase: 'Ship',
         icon: Rocket,
     },
 ];
 
 /** One workflow card — shared by the desktop stepper and the mobile timeline. */
 const StepCard = ({ step }: { step: Step }) => {
-    const color = PHASE_COLOR[step.phase];
     const Icon = step.icon;
     const Badge = step.badge;
 
     return (
         <div
-            className="workflow-card group relative flex h-full flex-col gap-2.5 rounded-xl border bg-background-light p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_34px_-16px_var(--phase)]"
+            className="workflow-card group relative flex h-full flex-col gap-2.5 rounded-xl border border-white/10 bg-background-light p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_34px_-16px_hsl(var(--primary))]"
             style={
-                {
-                    '--phase': color,
-                    borderColor: step.highlight ? `${color}66` : undefined,
-                    boxShadow: step.highlight
-                        ? `0 0 0 1px ${color}44`
-                        : undefined,
-                } as CSSProperties
+                step.highlight
+                    ? ({
+                          borderColor: 'hsl(var(--primary) / 0.5)',
+                          boxShadow: '0 0 0 1px hsl(var(--primary) / 0.35)',
+                      } as CSSProperties)
+                    : undefined
             }
         >
-            <div className="flex items-center justify-between">
-                <span className="font-anton text-sm leading-none text-muted-foreground">
-                    {step.n.toString().padStart(2, '0')}
-                </span>
-                <span
-                    className="size-2 shrink-0 rounded-full"
-                    style={{ backgroundColor: color }}
-                    aria-hidden
-                />
-            </div>
+            <span className="font-anton text-sm leading-none text-muted-foreground">
+                {step.n.toString().padStart(2, '0')}
+            </span>
 
             <div className="relative size-9">
                 {step.logo ? (
@@ -134,8 +110,7 @@ const StepCard = ({ step }: { step: Step }) => {
                     />
                 ) : Icon ? (
                     <Icon
-                        className="size-8"
-                        style={{ color }}
+                        className="size-8 text-primary"
                         strokeWidth={1.6}
                         aria-hidden
                     />
@@ -158,10 +133,7 @@ const StepCard = ({ step }: { step: Step }) => {
                     {step.role}
                 </span>
                 {step.highlight && (
-                    <span
-                        className="text-[11px] font-semibold"
-                        style={{ color }}
-                    >
+                    <span className="text-[11px] font-semibold text-primary">
                         AI ships, I verify.
                     </span>
                 )}
@@ -237,31 +209,14 @@ const Workflow = () => {
             <div className="container" ref={container}>
                 <SectionTitle title="My Workflow" />
 
-                <p className="mb-8 max-w-[560px] text-muted-foreground">
+                <p className="mb-12 max-w-[560px] text-muted-foreground">
                     How I take a project from a client request to production. AI
                     accelerates every step — but I own the outcome and verify the
                     work by hand.
                 </p>
 
-                {/* phase legend */}
-                <div className="mb-10 flex flex-wrap gap-x-6 gap-y-2">
-                    {PHASES.map((p) => (
-                        <span
-                            key={p}
-                            className="flex items-center gap-2 text-sm text-muted-foreground"
-                        >
-                            <span
-                                className="size-2.5 rounded-full"
-                                style={{ backgroundColor: PHASE_COLOR[p] }}
-                                aria-hidden
-                            />
-                            {p}
-                        </span>
-                    ))}
-                </div>
-
                 {/* ---------- Desktop: single-row stepper ---------- */}
-                <div className="relative hidden pb-16 lg:block">
+                <div className="relative hidden pb-20 lg:block">
                     {/* row of cards + connector line */}
                     <div className="relative grid grid-cols-6 gap-4">
                         {/* connector (draws L→R, behind cards, shows in the gaps) */}
@@ -276,17 +231,18 @@ const Workflow = () => {
                         ))}
                     </div>
 
-                    {/* loop-back: dashed "U" under the row, end → start */}
+                    {/* loop-back: dashed "U" from UAT (step 05) back to step 01 */}
                     <div
-                        className="wf-loop pointer-events-none absolute inset-x-[8.3%] bottom-4 h-9 rounded-b-2xl border-b-2 border-l-2 border-r-2 border-dashed"
-                        style={{ borderColor: `${PHASE_COLOR.Verify}88` }}
+                        className="wf-loop pointer-events-none absolute bottom-6 left-[8.3%] right-[25%] h-10 rounded-b-2xl border-b-[3px] border-l-[3px] border-r-[3px] border-dashed border-white/70"
                         aria-hidden
                     />
-                    <span
-                        className="wf-loop absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap text-[11px] font-medium"
-                        style={{ color: PHASE_COLOR.Verify }}
-                    >
-                        <RotateCcw className="size-3" aria-hidden />
+                    {/* up arrow into step 01 */}
+                    <ChevronUp
+                        className="wf-loop pointer-events-none absolute bottom-[54px] left-[8.3%] size-5 -translate-x-1/2 text-white/70"
+                        aria-hidden
+                    />
+                    <span className="wf-loop absolute bottom-0 left-[41.65%] flex -translate-x-1/2 items-center gap-2 whitespace-nowrap text-[15px] font-medium text-white">
+                        <RotateCcw className="size-4" aria-hidden />
                         New requirements loop back to step 01 — the cycle repeats
                     </span>
                 </div>
@@ -301,21 +257,15 @@ const Workflow = () => {
                         {STEPS.map((s) => (
                             <div key={s.n} className="relative pl-9">
                                 <span
-                                    className="absolute left-0 top-5 size-4 rounded-full border-2 border-background"
-                                    style={{
-                                        backgroundColor: PHASE_COLOR[s.phase],
-                                    }}
+                                    className="absolute left-0 top-5 size-4 rounded-full border-2 border-background bg-primary"
                                     aria-hidden
                                 />
                                 <StepCard step={s} />
                             </div>
                         ))}
                     </div>
-                    <p
-                        className="mt-5 flex items-center gap-2 pl-9 text-[13px]"
-                        style={{ color: PHASE_COLOR.Verify }}
-                    >
-                        <RotateCcw className="size-3.5 shrink-0" aria-hidden />
+                    <p className="mt-6 flex items-center gap-2 pl-9 text-[15px] font-medium text-white">
+                        <RotateCcw className="size-4 shrink-0" aria-hidden />
                         New requirements loop back to step 01 — the cycle
                         repeats.
                     </p>
