@@ -57,7 +57,6 @@ const STEPS: Step[] = [
         role: 'Developer (me)',
         logo: '/logo/claude.svg',
         badge: Terminal,
-        highlight: true,
     },
     {
         n: 5,
