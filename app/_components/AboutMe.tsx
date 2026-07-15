@@ -9,27 +9,9 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const AboutMe = () => {
     const container = React.useRef<HTMLDivElement>(null);
 
-    useGSAP(
-        () => {
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    id: 'about-me-in',
-                    trigger: container.current,
-                    start: 'top 70%',
-                    end: 'bottom bottom',
-                    scrub: 0.5,
-                },
-            });
-
-            tl.from('.slide-up-and-fade', {
-                y: 150,
-                opacity: 0,
-                stagger: 0.05,
-            });
-        },
-        { scope: container },
-    );
-
+    // About now sits right under the Hero on the first screen, so its content
+    // stays visible by default (like the Hero) — no hide-until-scrolled entrance.
+    // Keep only the gentle fade-up as the section scrolls away.
     useGSAP(
         () => {
             const tl = gsap.timeline({
