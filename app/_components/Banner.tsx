@@ -75,10 +75,11 @@ const Banner = () => {
                         <span className="font-medium text-foreground">
                             Panupong (Beer)
                         </span>{' '}
-                        — a full-stack developer who builds management systems
-                        and business platforms end to end, from database to
-                        dashboard — with an engineering background where
-                        reliability was never optional.
+                        — a full-stack developer who builds the management
+                        systems and business platforms companies run on, from
+                        database to dashboard. I direct AI across the whole
+                        build but review everything myself — a reliability habit
+                        from years in engineering.
                     </p>
                     <Button
                         as="link"
