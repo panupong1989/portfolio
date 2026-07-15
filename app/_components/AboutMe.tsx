@@ -54,11 +54,6 @@ const AboutMe = () => {
     return (
         <section className="pb-section" id="about-me">
             <div className="container" ref={container}>
-                <h2 className="text-2xl md:text-4xl font-light mb-10 slide-up-and-fade">
-                    I build the modern way — directing AI across planning, code
-                    and review, so I ship full products end to end, fast.
-                </h2>
-
                 <p className="pb-3 border-b text-muted-foreground slide-up-and-fade">
                     This is me.
                 </p>
