@@ -19,10 +19,6 @@ const MENU_LINKS = [
         url: '/',
     },
     {
-        name: 'About Me',
-        url: '/#about-me',
-    },
-    {
         name: 'Experience',
         url: '/#my-experience',
     },
