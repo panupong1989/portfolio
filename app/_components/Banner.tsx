@@ -74,11 +74,11 @@ const Banner = () => {
                         Hi! I&apos;m{' '}
                         <span className="font-medium text-foreground">
                             Panupong (Beer)
-                        </span>
-                        . A full-stack developer who builds IoT platforms,
-                        databases, and management systems end to end — directing
-                        AI across the whole stack and reviewing everything it
-                        ships.
+                        </span>{' '}
+                        — a full-stack developer who builds management systems
+                        and business platforms end to end, from database to
+                        dashboard — with an engineering background where
+                        reliability was never optional.
                     </p>
                     <Button
                         as="link"
@@ -113,12 +113,6 @@ const Banner = () => {
                         <p className="text-muted-foreground">
                             Years in Engineering
                         </p>
-                    </div>
-                    <div className="slide-up-and-fade">
-                        <h5 className="text-3xl sm:text-4xl font-anton text-primary mb-1.5">
-                            IoT
-                        </h5>
-                        <p className="text-muted-foreground">Device to Cloud</p>
                     </div>
                 </div>
             </div>

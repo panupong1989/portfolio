@@ -55,9 +55,8 @@ const AboutMe = () => {
         <section className="pb-section" id="about-me">
             <div className="container" ref={container}>
                 <h2 className="text-4xl md:text-6xl font-thin mb-20 slide-up-and-fade">
-                    I build the modern way — directing a whole stack of AI tools
-                    to plan, write and review code, so I can ship full products
-                    end to end, fast.
+                    I build the modern way — directing AI across planning, code
+                    and review, so I ship full products end to end, fast.
                 </h2>
 
                 <p className="pb-3 border-b text-muted-foreground slide-up-and-fade">
@@ -73,19 +72,19 @@ const AboutMe = () => {
                     <div className="md:col-span-7">
                         <div className="text-lg text-muted-foreground max-w-[450px]">
                             <p className="slide-up-and-fade">
-                                I&apos;m a full-stack developer who builds IoT
-                                platforms and management systems end to end — the
-                                device firmware, the database and backend behind
-                                it, and the dashboards people actually use.
+                                I build the systems businesses run on —
+                                back-office platforms, admin tools, and the
+                                reporting dashboards teams use every day. Most of
+                                my work is data-heavy: multi-tenant PostgreSQL,
+                                clean data models, and reporting people can
+                                trust.
                             </p>
                             <p className="mt-3 slide-up-and-fade">
-                                Most of my work is data-heavy: multi-tenant
-                                PostgreSQL, realtime pipelines over MQTT, and
-                                admin and reporting systems. I direct AI across
-                                my whole workflow to ship fast, but I review
-                                everything it produces before it ships — a habit
-                                from years building systems where a bug means
-                                real hardware fails.
+                                I direct AI across the whole build, but I review
+                                everything before it ships — a discipline from
+                                years in industrial engineering, where a bug
+                                means real hardware fails. The same reliability I
+                                built into machines, I build into software.
                             </p>
                         </div>
                     </div>
