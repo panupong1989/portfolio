@@ -30,6 +30,10 @@ const Footer = async () => {
                     {GENERAL_INFO.email}
                 </a>
 
+                <p className="text-muted-foreground mb-10 -mt-5">
+                    0851478874
+                </p>
+
                 <div className="">
                     <a
                         href="https://github.com/Tajmirul/portfolio-2.0"
